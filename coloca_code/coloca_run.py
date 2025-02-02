@@ -8,7 +8,7 @@ from package_func import *
 from coloca_func import * 
 from support_func import *
 
-## Tag Distance betweeen two proteins for example  GPCR (R) and G-Protein (G)
+## Tag Distance betweeen two proteins for example  GPCR (R) and G-Protein (G), 0.01um = 10nm
 tag_dist = 0.01
 
 ## Read the sample localization distribution
@@ -18,9 +18,9 @@ prec_channel_1 = filtered_data['Precision [nm]']/1000
 
 
 def main(density):
-    # Number of True Pairs 
+    # Number of true pairs 
     num_points = int(density*100*1/2)
-    # Number of Extra Background points for each species R and G 
+    # Number of extra background points for each species R and G 
     num_R_extra = int(density*100*1/2)
     num_G_extra = int(density*100*1/2) 
     # Run the colocalization algorithm 

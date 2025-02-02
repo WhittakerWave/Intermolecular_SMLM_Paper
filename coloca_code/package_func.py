@@ -13,6 +13,7 @@ from scipy.spatial import cKDTree
 from scipy.stats import ncx2, pearsonr, spearmanr
 import random
 import math 
+from collections import deque
 #from publish_format import useLargeSize
 from scipy.stats import expon
 from scipy.optimize import linear_sum_assignment
@@ -28,4 +29,7 @@ from matplotlib.widgets import PolygonSelector
 from matplotlib.path import Path
 from shapely.geometry import Polygon, box
 from concurrent.futures import ProcessPoolExecutor, as_completed
+# from matplotlib.legend_handler import PathCollectionHandler
+import networkx as nx
+print(nx.__version__)
 #from publish_format import useLargeSize

@@ -66,12 +66,6 @@ def closest_pairs_index_precision(R_pos, G_pos, R_prec, G_prec, factor, threshol
     return final_pairs, frame_pairs
 
 #####################################################################################################
-
-# from matplotlib.legend_handler import PathCollectionHandler
-import networkx as nx
-print(nx.__version__)
-
-#####################################################################################################
 #### Prob pf the pair by the Monte Carlo estimation 
 def prob_pair(point1, point2, sigma1, sigma2, num_points, threshold):
     ## Sample the first point with precision sigma1
@@ -84,8 +78,6 @@ def prob_pair(point1, point2, sigma1, sigma2, num_points, threshold):
     probability = num_points_within_circle / num_points
     return probability
 # probability = prob_pair([0,0], [0,0], sigma1 = [20,20], sigma2 = [20,20], num_points = 10**4, threshold = 1.24*20)
-
-from collections import deque
 
 def closest_pairs_index_prec(R_filtered, G_filtered, R_prec, G_prec, factor, threshold, R_frame, G_frame):
     ## Combine the precision and using the real expression to find the maximum pairs
@@ -222,6 +214,7 @@ def run_background(num_pair_exp_mean, num_R, num_G, tag_dist, precision_value, d
         num_G = num_G_initial - (num_pair_exp_mean - RG_overlap_pair_simu_ave)
     return MC_hist, pair_est
 
+########################################################################################################
 
 def run_background_two_channel(num_pair_exp_mean, num_R, num_G, tag_dist, prec1, prec2, d_true_thre, dis_tree_thre_factor,  area_value, number_iter, num_MC_points):
     ### Calculate the first pairing result
@@ -252,6 +245,7 @@ def run_background_two_channel(num_pair_exp_mean, num_R, num_G, tag_dist, prec1,
         num_G = num_G_initial - (num_pair_exp_mean - RG_overlap_pair_simu_ave)
     return MC_hist, pair_est
 
+########################################################################################################
 
 def run_exp_iterative_MC(tag_dist, num_points, num_R_extra, num_G_extra, precision, d_true_thre, dis_tree_thre_factor, area, iteration_full, iteration_in_step, iteration_step, num_MC_points):
     ### Calculate the first pairing result
@@ -330,6 +324,7 @@ def run_exp_iterative_MC(tag_dist, num_points, num_R_extra, num_G_extra, precisi
     print("Summary results saved as summary_results.txt")
     return num_pair_exp, num_pair_exp_mean, MC_last_value_list, MC_last_mean, pair_est_last_value_list, pair_est_last_mean
 
+########################################################################################################
 
 def run_background_task(j, num_pair_exp_mean, num_R, num_G, tag_dist, prec1, prec2, d_true_thre, dis_tree_thre_factor, area_value, iteration_step, num_MC_points):
     # This function should handle a single iteration of the background computation
@@ -339,6 +334,8 @@ def run_background_task(j, num_pair_exp_mean, num_R, num_G, tag_dist, prec1, pre
                                         d_true_thre=d_true_thre, dis_tree_thre_factor=dis_tree_thre_factor, area_value=area_value,\
                                         number_iter=iteration_step, num_MC_points=num_MC_points)
     return j, MC_hist, pair_est
+
+########################################################################################################
 
 def parallel_execution(iteration_in_step, num_pair_exp_mean, num_R, num_G, tag_dist, prec1, prec2, d_true_thre, dis_tree_thre_factor, area, iteration_step, num_MC_points):
     # Create a pool of workers
@@ -359,6 +356,7 @@ def parallel_execution(iteration_in_step, num_pair_exp_mean, num_R, num_G, tag_d
     
     return final_results, MC_last_value_list, pair_est_last_value_list
 
+########################################################################################################
 
 def run_exp_iterative_MC_parallel(tag_dist, num_points, num_R_extra, num_G_extra, precision, d_true_thre, dis_tree_thre_factor, area, iteration_full, iteration_in_step, iteration_step, num_MC_points):
     # Existing code for Part I
@@ -445,17 +443,40 @@ def run_exp_iterative_MC_parallel(tag_dist, num_points, num_R_extra, num_G_extra
     print("Summary results saved as summary_results.txt")
     return num_pair_exp, num_pair_exp_mean, MC_last_value_list, MC_last_mean, pair_est_last_value_list, pair_est_last_mean
 
+########################################################################################################
 
 def run_exp_iterative_MC_parallel_two_channel(tag_dist, num_points, num_R_extra, num_G_extra, prec1, prec2, d_true_thre, dis_tree_thre_factor, area, iteration_full, iteration_in_step, iteration_step, num_MC_points):
-    # Existing code for Part I
+    """ Main function for 
+
+    Parameters
+    ----------
+    tag_dist: Distance betweeen two proteins R and G
+    num_points: total number of pairs RG
+    num_R_extra: number of background R
+    num_G_extra: number of background G
+    prec1: localization precision array of R
+    prec2: localization precision array of G
+    d_true_thre: the upper bound for d_true
+    dis_tree_thre_factor: the factor for distance tree threshold 
+    area: area 
+    iteration_full: number of full iterations 
+    iteration_in_step: 
+    iteration_step: 
+    num_MC_points: number of Monte Carlo points 
+    """
+    ## 
     num_pair_exp = []
+    ## True positive, False negative, True negative, recall, precision, accuracy
     TP_list, FN_list, FP_list, TN_list, recall_list, Precision_list, Accuracy_list = [], [], [], [], [], [], []
     
     for iteration in range(iteration_full):
         print("Current iteration:", iteration)
+        # Generate simulation points, positions of R, G, precisions of R and G
         R_pos, G_pos, R_prec, G_prec = Generate_Points_two_channel(tag_dist, num_points, num_R_extra, num_G_extra, prec1, prec2, area=area)
+        # Build the maximum weighted bipartitle graph, return the matching
         pair_exp = pair_matching_max_weight_nx(R_pos, G_pos, R_prec, G_prec, d_true_thre=d_true_thre, dis_tree_thre_factor=dis_tree_thre_factor, num_MC_points=num_MC_points)
         num_pair_exp.append(len(pair_exp))
+        # Get the summary statistics for the results 
         summary_results = summary_pairs(pair_exp, num_points, num_R_extra, num_G_extra)
         TP_list.append(summary_results[0])
         FN_list.append(summary_results[1])
@@ -464,7 +485,7 @@ def run_exp_iterative_MC_parallel_two_channel(tag_dist, num_points, num_R_extra,
         recall_list.append(summary_results[4])
         Precision_list.append(summary_results[5])
         Accuracy_list.append(summary_results[6])
-    
+    # mean TP, FN, FP, TN, recall, precision and accuracy
     mean_TP = np.mean(TP_list)
     mean_FN = np.mean(FN_list)
     mean_FP = np.mean(FP_list)
@@ -473,7 +494,7 @@ def run_exp_iterative_MC_parallel_two_channel(tag_dist, num_points, num_R_extra,
     mean_Precision = np.mean(Precision_list)
     mean_Accuracy = np.mean(Accuracy_list)
     
-    # Prepare to run the background computations in parallel
+    # Prepare to run the number background estimation in parallel
     num_R = len(R_pos)
     num_G = len(G_pos)
     density_R = num_R/area
@@ -485,7 +506,18 @@ def run_exp_iterative_MC_parallel_two_channel(tag_dist, num_points, num_R_extra,
     results = []
 
     results, MC_last_value_list, pair_est_last_value_list = parallel_execution(
-        iteration_in_step, num_pair_exp_mean, num_R, num_G, tag_dist, prec1, prec2, d_true_thre, dis_tree_thre_factor, area, iteration_step, num_MC_points
+        iteration_in_step, 
+        num_pair_exp_mean, 
+        num_R, 
+        num_G, 
+        tag_dist, 
+        prec1, 
+        prec2, 
+        d_true_thre, 
+        dis_tree_thre_factor, 
+        area, 
+        iteration_step, 
+        num_MC_points
     )
     
     # Write results to file sequentially after all parallel tasks have completed
