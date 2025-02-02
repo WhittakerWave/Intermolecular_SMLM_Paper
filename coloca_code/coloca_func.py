@@ -81,7 +81,7 @@ def prob_pair(point1, point2, sigma1, sigma2, num_points, threshold):
 
 def closest_pairs_index_prec(R_filtered, G_filtered, R_prec, G_prec, factor, threshold, R_frame, G_frame):
     ## Combine the precision and using the real expression to find the maximum pairs
-    ## Or use cKDTree and query_ball_point
+    ## Or use cKDTree and query_ball_point 
     R_tree = KDTree(R_filtered)
     G_tree = KDTree(G_filtered)
     pairs_R = G_tree.query_radius(R_filtered, threshold)
@@ -115,7 +115,7 @@ def closest_pairs_index_prec(R_filtered, G_filtered, R_prec, G_prec, factor, thr
 #### Functions for maximum weighted bipartite matching
 def pair_matching_max_weight_nx(R_pos, G_pos, R_prec, G_prec, d_true_thre, dis_tree_thre_factor, num_MC_points):
     """ Function for maximum weighted bipartitle graph matching
-    
+
     Parameters
     ----------
     R_pos: Position of R
@@ -174,7 +174,7 @@ def pair_matching_max_weight_nx(R_pos, G_pos, R_prec, G_prec, d_true_thre, dis_t
 ########################################################################################################
 #### Function to run the summary of the pairs
 def summary_pairs(pair, num_points, num_R_extra, num_G_extra):
-    ### Need two filtering: 1) same or not 2) smaller than num_points to ensure recall is smaller than 1
+    ## Need two filtering: (1) same or not (2) smaller than num_points to ensure recall is smaller than 1
     matching_pairs = [subarray[0] for subarray in pair if subarray[0] == subarray[1] and subarray[0] < num_points]
     TP = len(matching_pairs)
     ##  False negatives (FN)
