@@ -20,6 +20,7 @@ import scipy
 import scipy.constants as spc
 import seaborn as sns
 import matplotlib.pyplot as plt
+import multiprocessing
 from matplotlib.widgets import PolygonSelector
 from matplotlib.path import Path
 from scipy import special, stats

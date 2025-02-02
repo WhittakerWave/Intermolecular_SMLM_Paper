@@ -1,4 +1,5 @@
 
+
 #####################################################################################################
 from package_func import *
 from support_func import *
@@ -113,6 +114,18 @@ def closest_pairs_index_prec(R_filtered, G_filtered, R_prec, G_prec, factor, thr
 ########################################################################################################
 #### Functions for maximum weighted bipartite matching
 def pair_matching_max_weight_nx(R_pos, G_pos, R_prec, G_prec, d_true_thre, dis_tree_thre_factor, num_MC_points):
+    """ Function for maximum weighted bipartitle graph matching
+
+    Parameters
+    ----------
+    R_pos: Position of R
+    G_pos: Position of G
+    R_prec: Localization Precision of R
+    G_prec: Localization Precision of G
+    d_true_thre: the upper bound for d_true
+    dis_tree_thre_factor: the factor for distance tree threshold 
+    num_MC_points: number of Monte Carlo points 
+    """
     ### Using NetworkX Package to find the pairs
     R_tree = KDTree(R_pos)
     G_tree = KDTree(G_pos)
@@ -138,10 +151,8 @@ def pair_matching_max_weight_nx(R_pos, G_pos, R_prec, G_prec, d_true_thre, dis_t
         item[1] = int(item[1])
         prob = prob_pair(R_pos[item[0]], G_pos[item[1]], R_prec[item[0]], G_prec[item[1]], num_MC_points, d_true_thre)
         weights_matrix[item[0], item[1]] = prob
-    # create an empty bipartite graph
-    # weights_matrix = np.array(weights_matrix).astype(float)
-    # weights_matrix = np.where(weights_matrix > 0, weights_matrix, 0)
     weights_matrix = np.array(weights_matrix*100000).astype(int)
+    # create an empty bipartite graph
     G = nx.Graph()
     # add the vertices from each partition
     G.add_nodes_from(range(len(R_pos)), bipartite=0)
@@ -164,7 +175,6 @@ def pair_matching_max_weight_nx(R_pos, G_pos, R_prec, G_prec, d_true_thre, dis_t
 #### Function to run the summary of the pairs
 def summary_pairs(pair, num_points, num_R_extra, num_G_extra):
     ### Need two filtering: 1) same or not 2) smaller than num_points to ensure recall is smaller than 1
-    ## matching_pairs = [subarray[0] for subarray in pair if subarray[0] == subarray[1]] 
     matching_pairs = [subarray[0] for subarray in pair if subarray[0] == subarray[1] and subarray[0] < num_points]
     TP = len(matching_pairs)
     ##  False negatives (FN)
@@ -187,6 +197,22 @@ def summary_pairs(pair, num_points, num_R_extra, num_G_extra):
 ########################################################################################################
 #### Function to run the iterative monte carlo 
 def run_background(num_pair_exp_mean, num_R, num_G, tag_dist, precision_value, d_true_thre, dis_tree_thre_factor,  area_value, number_iter, num_MC_points):
+    """ Main function for colocalization
+
+    Parameters
+    ----------
+    num_pair_exp_mean: mean number of pairs found
+    num_R: number of R
+    num_G: number of G
+    tag_dist: Distance betweeen two proteins R and G
+    precision_value: localization precision of R, G, assume the same
+    d_true_thre: the upper bound for d_true
+    dis_tree_thre_factor: the factor for distance tree threshold 
+    area_value: area 
+    number_iter: number of iteractions 
+    num_MC_points: number of Monte Carlo points 
+    """
+    
     ### Calculate the first pairing result
     num_R_initial = num_R
     num_G_initial = num_G
@@ -218,6 +244,23 @@ def run_background(num_pair_exp_mean, num_R, num_G, tag_dist, precision_value, d
 ########################################################################################################
 
 def run_background_two_channel(num_pair_exp_mean, num_R, num_G, tag_dist, prec1, prec2, d_true_thre, dis_tree_thre_factor,  area_value, number_iter, num_MC_points):
+    """ Main function for colocalization
+
+    Parameters
+    ----------
+    num_pair_exp_mean: mean number of pairs found
+    num_R: number of R
+    num_G: number of G
+    tag_dist: Distance betweeen two proteins R and G
+    prec1: localization precision of R
+    prec2: localization precision of G
+    d_true_thre: the upper bound for d_true
+    dis_tree_thre_factor: the factor for distance tree threshold 
+    area_value: area 
+    number_iter: number of iteractions 
+    num_MC_points: number of Monte Carlo points 
+    """
+
     ### Calculate the first pairing result
     num_R_initial = num_R
     num_G_initial = num_G
@@ -436,7 +479,7 @@ def run_exp_iterative_MC_parallel(tag_dist, num_points, num_R_extra, num_G_extra
     )
     
     # Write results to file sequentially after all parallel tasks have completed
-    with open(f"Parallel_results_Density_{density_R}.txt", "w") as file:
+    with open(f"Results_Density_{density_R}.txt", "w") as file:
         file.write(f"Number of True Pairs: {num_points}\n")
         file.write(f"Number of R extra: {num_R_extra}\n")
         file.write(f"Number of G extra: {num_G_extra}\n")
@@ -556,7 +599,7 @@ def run_exp_iterative_MC_parallel_two_channel(tag_dist, num_points, num_R_extra,
     )
     
     # Write results to file sequentially after all parallel tasks have completed
-    with open(f"Parallel_results_Density_{density_R}.txt", "w") as file:
+    with open(f"Results_Density_{density_R}.txt", "w") as file:
         file.write(f"Number of True Pairs: {num_points}\n")
         file.write(f"Number of R extra: {num_R_extra}\n")
         file.write(f"Number of G extra: {num_G_extra}\n")

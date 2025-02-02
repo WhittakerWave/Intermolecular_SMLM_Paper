@@ -1,3 +1,4 @@
+
 #!/usr/bin/env python
 #####################################################################################################
 ### Colocalization using Simulation Data to test the algorthms 
@@ -12,7 +13,7 @@ from support_func import *
 tag_dist = 0.01
 simu_area = 50
 ## Read the sample localization distribution
-data = pd.read_csv('Example.txt', delimiter='\t', encoding='ISO-8859-1')
+data = pd.read_csv('Example_SMLM.txt', delimiter='\t', encoding='ISO-8859-1')
 filtered_data = data[(data['Precision [nm]'] >= 5) & (data['Precision [nm]'] <= 40)]
 prec_channel_1 = filtered_data['Precision [nm]']/1000
 
@@ -42,18 +43,10 @@ def main(density):
         )
 
 
-def run_parallel(d_values):
-
-    pool = multiprocessing.Pool(processes=multiprocessing.cpu_count())  # Use all available CPU cores
-    pool.map(main, d_values)
-    pool.close()
-    pool.join()
-
 def run(d_values):
     for item in d_values:
         main(item)
 
 if __name__ == "__main__":
     d_range = np.arange(4, 8, 4)
-    # run_parallel(d_range)
     run(d_range)
