@@ -6,7 +6,7 @@
 ## Description
 Main Code for https://www.biorxiv.org/content/10.1101/2024.05.10.593617v1
 
-This project provides tools for analysis on molecular interactions in SMLM datasets, which are used to examine the spatial relationship between different molecular species within cells. The core functions, supporting utilities, and dependencies are modularized across multiple scripts for better maintainability and reuse.
+This project provides tools for analysis on molecular interactions in SMLM datasets, which are used to examine the spatial relationship between different molecular species within cells. The core functions, supporting utilities, and dependencies are separated.
 
 ### File Overview:
 - **`coloca_func.py`**: Contains the core colocalization analysis functions.
