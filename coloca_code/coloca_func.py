@@ -111,6 +111,9 @@ def closest_pairs_index_prec(R_filtered, G_filtered, R_prec, G_prec, factor, thr
                     frame_pairs.append([R_frame[pair[0]], G_frame[pair[1]]])
     return final_pairs, frame_pairs
 
+########################################################################################################
+#### Functions for maximum weighted bipartite matching
+
 def pair_matching_max_weight_nx(R_pos, G_pos, R_prec, G_prec, d_true_thre, dis_tree_thre_factor, num_MC_points):
     ### Using NetworkX Package to find the pairs
     R_tree = KDTree(R_pos)
