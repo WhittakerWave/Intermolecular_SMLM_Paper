@@ -10,9 +10,9 @@ A brief description.
 
 ## Installation
 To run the Coloca project locally, follow the instructions below:
-Clone the repository:
+1. Clone the repository:
 git clone https://github.com/yourusername/coloca.git
-pip install -r requirements.txt
+2. pip install -r requirements.txt
 
 ## Usage 
 To run the main functionality, execute coloca_run.py 
