@@ -4,10 +4,9 @@
 from package_func import *
 
 #####################################################################################################
-def Random_Point(num_R, num_G, prec_R, prec_G, grid):
+def Random_Point(num_R, num_G, scale):
     ## Generate Random points in the domian 
-    ## here we haven't used precision, maybe use later
-    scale = grid[0][1]
+    ## Here we haven't used precision, maybe use later, the precision of each points will be added later
     R_pos = np.random.random((num_R, 2))*scale
     G_pos = np.random.random((num_G, 2))*scale
     return R_pos, G_pos
@@ -50,14 +49,7 @@ def homo_Possion_Process1(num_R, num_G, R_precision, G_precision, area, frame_le
         probs = G_prec_arr / np.sum(G_prec_arr)  # Normalize probabilities
         G_prec_list2 = np.random.choice(G_prec_arr, size = len(points_G)-len(G_precision), p=probs, replace=True).tolist()
         G_prec_list = G_prec_list1 + G_prec_list2
-    '''
-    R_prec_arr = np.array(list(R_precision))
-    probs = R_prec_arr / np.sum(R_prec_arr)  # Normalize probabilities
-    R_prec_list = np.random.choice(R_prec_arr, size=len(points_R), p=probs, replace=True).tolist()
-    G_prec_arr = np.array(list(G_precision))
-    probs = G_prec_arr / np.sum(G_prec_arr)  # Normalize probabilities
-    G_prec_list = np.random.choice(G_prec_arr, size=len(points_G), p=probs, replace=True).tolist()
-    '''
+
     # Generate two uniform distributions
     uniform_dist1 = np.arange(0, frame_len +1)
     uniform_dist2 = np.arange(0, frame_len +1)
@@ -93,17 +85,8 @@ def frame_diff(frame_pairs, title, cell):
         ax.set_title(f'Frame Difference of {cell}', fontsize = 20)
     ax.set_xlabel('Difference of frames in a pair (abs)')
     ax.set_ylabel('Count')
-    #useLargeSize(plt, ax, marker_lines = None, fontsize = 'xx-large',fontproperties=None, LW=2.3) 
     plt.show()
 
-
-def Random_Point(num_R, num_G, scale):
-    ## Generate Random points in the domian 
-    ## Here we haven't used precision, maybe use later, the precision of each points will be added later
-    R_pos = np.random.random((num_R, 2))*scale
-    G_pos = np.random.random((num_G, 2))*scale
-    return R_pos, G_pos
-# R_uniform, G_uniform = Random_Point(num_R, num_G, prec_R=None, prec_G=None, scale=10)
 
 # Define a function to calculate the coordinates of the R and G vertices
 def get_vertices(tag_dist, point):
@@ -170,8 +153,6 @@ def Generate_Points_two_channel(tag_dist, num_points, num_R_extra, num_G_extra, 
    G_pos = G_pos + gaussian_array_G
    return R_pos, G_pos, R_prec_2d[:,0], G_prec_2d[:,0]
 
-# R_pos, G_pos, R_prec, G_prec = Generate_Points(tag_dist, num_points, num_R_extra, num_G_extra, precision = 15/1000, area=100)
-#print(R_pos)
 
 #### Function for randomly select the points in the list
 def random_select(R_pos, G_pos, R_prec, G_prec, sample_size):
@@ -182,12 +163,6 @@ def random_select(R_pos, G_pos, R_prec, G_prec, sample_size):
     G_pos = G_pos[random_indices_G]
     G_prec = G_prec[random_indices_G]
     return R_pos, G_pos, R_prec, G_prec, random_indices_R, random_indices_G
-
-#### Randomly select a subset of data
-'''
-R_pos, G_pos, R_prec, G_prec, random_indices_R, random_indices_G = \
-    random_select(R_pos, G_pos, R_prec, G_prec, 1000)
-'''
 
 #################################################################################################
 #### Function to plot colocalization and non-colocalization

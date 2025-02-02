@@ -77,7 +77,6 @@ def prob_pair(point1, point2, sigma1, sigma2, num_points, threshold):
     num_points_within_circle = np.count_nonzero(distances <= threshold)
     probability = num_points_within_circle / num_points
     return probability
-# probability = prob_pair([0,0], [0,0], sigma1 = [20,20], sigma2 = [20,20], num_points = 10**4, threshold = 1.24*20)
 
 def closest_pairs_index_prec(R_filtered, G_filtered, R_prec, G_prec, factor, threshold, R_frame, G_frame):
     ## Combine the precision and using the real expression to find the maximum pairs
@@ -113,7 +112,6 @@ def closest_pairs_index_prec(R_filtered, G_filtered, R_prec, G_prec, factor, thr
 
 ########################################################################################################
 #### Functions for maximum weighted bipartite matching
-
 def pair_matching_max_weight_nx(R_pos, G_pos, R_prec, G_prec, d_true_thre, dis_tree_thre_factor, num_MC_points):
     ### Using NetworkX Package to find the pairs
     R_tree = KDTree(R_pos)
