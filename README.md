@@ -1,5 +1,9 @@
 # Intermolecular_SMLM_Paper 
 
+<img width="602" alt="Screenshot 2025-02-02 at 1 11 54 AM" src="https://github.com/user-attachments/assets/68f9eb51-6a36-4dcc-9ae0-40c9b63a6a77" />
+
+
+
 ## Description
 Main Code for https://www.biorxiv.org/content/10.1101/2024.05.10.593617v1
 
