@@ -248,6 +248,23 @@ def run_background_two_channel(num_pair_exp_mean, num_R, num_G, tag_dist, prec1,
 ########################################################################################################
 
 def run_exp_iterative_MC(tag_dist, num_points, num_R_extra, num_G_extra, precision, d_true_thre, dis_tree_thre_factor, area, iteration_full, iteration_in_step, iteration_step, num_MC_points):
+    """ Main function for colocalization
+
+    Parameters
+    ----------
+    tag_dist: Distance betweeen two proteins R and G
+    num_points: total number of pairs RG
+    num_R_extra: number of background R
+    num_G_extra: number of background G
+    precision: localization precision, assume R and G same
+    d_true_thre: the upper bound for d_true
+    dis_tree_thre_factor: the factor for distance tree threshold 
+    area: area 
+    iteration_full: number of full iterations 
+    iteration_in_step: 
+    iteration_step: 
+    num_MC_points: number of Monte Carlo points 
+    """
     ### Calculate the first pairing result
     num_pair_exp = []
     TP_list, FN_list, FP_list, TN_list, recall_list, Precision_list, Accuracy_list = [], [], [], [], [], [], []
@@ -359,6 +376,23 @@ def parallel_execution(iteration_in_step, num_pair_exp_mean, num_R, num_G, tag_d
 ########################################################################################################
 
 def run_exp_iterative_MC_parallel(tag_dist, num_points, num_R_extra, num_G_extra, precision, d_true_thre, dis_tree_thre_factor, area, iteration_full, iteration_in_step, iteration_step, num_MC_points):
+    """ Main function for colocalization
+
+    Parameters
+    ----------
+    tag_dist: Distance betweeen two proteins R and G
+    num_points: total number of pairs RG
+    num_R_extra: number of background R
+    num_G_extra: number of background G
+    precision: localization precision, assume same for R and G
+    d_true_thre: the upper bound for d_true
+    dis_tree_thre_factor: the factor for distance tree threshold 
+    area: area 
+    iteration_full: number of full iterations 
+    iteration_in_step: 
+    iteration_step: 
+    num_MC_points: number of Monte Carlo points 
+    """
     # Existing code for Part I
     num_pair_exp = []
     TP_list, FN_list, FP_list, TN_list, recall_list, Precision_list, Accuracy_list = [], [], [], [], [], [], []
@@ -446,7 +480,7 @@ def run_exp_iterative_MC_parallel(tag_dist, num_points, num_R_extra, num_G_extra
 ########################################################################################################
 
 def run_exp_iterative_MC_parallel_two_channel(tag_dist, num_points, num_R_extra, num_G_extra, prec1, prec2, d_true_thre, dis_tree_thre_factor, area, iteration_full, iteration_in_step, iteration_step, num_MC_points):
-    """ Main function for 
+    """ Main function for colocalization
 
     Parameters
     ----------

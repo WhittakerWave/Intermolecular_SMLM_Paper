@@ -5,7 +5,6 @@ import os
 from re import L
 import seaborn as sns
 import numpy as np
-import multiprocessing
 import matplotlib.pyplot as plt
 from scipy import special, stats
 from sklearn.neighbors import KDTree, BallTree
@@ -32,4 +31,5 @@ from concurrent.futures import ProcessPoolExecutor, as_completed
 # from matplotlib.legend_handler import PathCollectionHandler
 import networkx as nx
 print(nx.__version__)
+import multiprocessing
 #from publish_format import useLargeSize
