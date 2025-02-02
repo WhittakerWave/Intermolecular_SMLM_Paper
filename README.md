@@ -8,9 +8,9 @@ Main Code for https://www.biorxiv.org/content/10.1101/2024.05.10.593617v1
 
 ### 
 
-`coloca_func.py` contains the core colocalization functions.
-`coloca_run.py` is the script to execute the main function.
-`support_func.py` is the script for supporting functions. 
+`coloca_func.py` contains the core colocalization functions.\\
+`coloca_run.py` is the script to execute the main function.\\
+`support_func.py` is the script for supporting functions. \\
 `package_func.py` imports all the required packages. 
 
 ## Installation
