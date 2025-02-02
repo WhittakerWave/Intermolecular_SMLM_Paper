@@ -15,7 +15,10 @@ To run the Coloca project locally, follow the instructions below:
    git clone https://github.com/WhittakerWave/Intermolecular_SMLM_Paper.git
 ```
 
-2. pip install -r requirements.txt
+2. Install the required dependencies
+```bash
+pip install -r requirements.txt
+```
 
 ## Usage 
 To run the main functionality, execute coloca_run.py 
