@@ -1,8 +1,6 @@
 
-#!/usr/bin/env python
 #####################################################################################################
 ### Colocalization using Simulation Data to test the algorthms 
-
 
 ### Import related functions 
 from package_func import *

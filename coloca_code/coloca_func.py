@@ -115,7 +115,7 @@ def closest_pairs_index_prec(R_filtered, G_filtered, R_prec, G_prec, factor, thr
 #### Functions for maximum weighted bipartite matching
 def pair_matching_max_weight_nx(R_pos, G_pos, R_prec, G_prec, d_true_thre, dis_tree_thre_factor, num_MC_points):
     """ Function for maximum weighted bipartitle graph matching
-
+    
     Parameters
     ----------
     R_pos: Position of R
@@ -521,7 +521,7 @@ def run_exp_iterative_MC_parallel(tag_dist, num_points, num_R_extra, num_G_extra
     print("Summary results saved as summary_results.txt")
     return num_pair_exp, num_pair_exp_mean, MC_last_value_list, MC_last_mean, pair_est_last_value_list, pair_est_last_mean
 
-########################################################################################################
+#######################################################################################################################################
 
 def run_exp_iterative_MC_parallel_two_channel(tag_dist, num_points, num_R_extra, num_G_extra, prec1, prec2, d_true_thre, dis_tree_thre_factor, area, iteration_full, iteration_in_step, iteration_step, num_MC_points):
     """ Main function for colocalization
