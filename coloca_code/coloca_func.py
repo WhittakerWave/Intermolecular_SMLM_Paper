@@ -388,7 +388,7 @@ def run_exp_iterative_MC(tag_dist, num_points, num_R_extra, num_G_extra, precisi
 ########################################################################################################
 
 def run_background_task(j, num_pair_exp_mean, num_R, num_G, tag_dist, prec1, prec2, d_true_thre, dis_tree_thre_factor, area_value, iteration_step, num_MC_points):
-    # This function should handle a single iteration of the background computation
+    # This function handles a single iteration of the background computation
     print(f"Iteration: {j}")
     np.random.seed(j)
     MC_hist, pair_est = run_background_two_channel(num_pair_exp_mean, num_R, num_G, tag_dist, prec1=prec1, prec2=prec2, \
