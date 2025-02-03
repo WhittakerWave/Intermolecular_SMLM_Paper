@@ -88,6 +88,7 @@ def closest_pairs_index_precision(R_pos, G_pos, R_prec, G_prec, factor, threshol
                 final_pairs.append((dist, pair))
     return final_pairs, frame_pairs
 
+
 #####################################################################################################
 def prob_pair(point1, point2, sigma1, sigma2, num_points, threshold):
     """ Function to calculate the proximity prob
@@ -111,38 +112,6 @@ def prob_pair(point1, point2, sigma1, sigma2, num_points, threshold):
     num_points_within_circle = np.count_nonzero(distances <= threshold)
     probability = num_points_within_circle / num_points
     return probability
-
-def closest_pairs_index_prec(R_filtered, G_filtered, R_prec, G_prec, factor, threshold, R_frame, G_frame):
-    ## Combine the precision and using the real expression to find the maximum pairs
-    ## Or use cKDTree and query_ball_point 
-    R_tree = KDTree(R_filtered)
-    G_tree = KDTree(G_filtered)
-    pairs_R = G_tree.query_radius(R_filtered, threshold)
-    pairs_G = R_tree.query_radius(G_filtered, threshold)
-    pairs_distance = []
-    for i, indices in enumerate(pairs_R):
-        for j in indices:
-            dist = np.linalg.norm(R_filtered[i] - G_filtered[j])
-            pairs_distance.append((dist, [i, j]))
-    for i, indices in enumerate(pairs_G):
-        for j in indices:
-            dist = np.linalg.norm(G_filtered[i] - R_filtered[j])
-            pairs_distance.append((dist, [j, i]))
-    pairs_distance.sort(key=lambda x: x[0])
-    final_pairs = []
-    used_points_R = set()
-    used_points_G = set()
-    frame_pairs = []
-    for dist, pair in pairs_distance:
-        vary_thre = factor * np.sqrt(R_prec[pair[0]]**2 + G_prec[pair[1]]**2)
-        if dist <= vary_thre:
-            if pair[0] not in used_points_R and pair[1] not in used_points_G:
-                used_points_R.add(pair[0])
-                used_points_G.add(pair[1])
-                final_pairs.append((dist, pair))
-                if R_frame is not None and G_frame is not None:
-                    frame_pairs.append([R_frame[pair[0]], G_frame[pair[1]]])
-    return final_pairs, frame_pairs
 
 ########################################################################################################
 #### Functions for maximum weighted bipartite matching
@@ -207,6 +176,15 @@ def pair_matching_max_weight_nx(R_pos, G_pos, R_prec, G_prec, d_true_thre, dis_t
 ########################################################################################################
 #### Function to run the summary of the pairs
 def summary_pairs(pair, num_points, num_R_extra, num_G_extra):
+    """ Function for summary statistics
+
+    Parameters
+    ----------
+    pair: pairs
+    num_points: number of true pairs 
+    num_R_extra: number of background R 
+    num_G_extra: number of background G
+    """
     ## Need two filtering: (1) same or not (2) smaller than num_points to ensure recall is smaller than 1
     matching_pairs = [subarray[0] for subarray in pair if subarray[0] == subarray[1] and subarray[0] < num_points]
     TP = len(matching_pairs)
@@ -229,7 +207,18 @@ def summary_pairs(pair, num_points, num_R_extra, num_G_extra):
 
 ########################################################################################################
 #### Function to run the iterative monte carlo 
-def run_background(num_pair_exp_mean, num_R, num_G, tag_dist, precision_value, d_true_thre, dis_tree_thre_factor,  area_value, number_iter, num_MC_points):
+def run_background(
+        num_pair_exp_mean, 
+        num_R, 
+        num_G, 
+        tag_dist, 
+        precision_value, 
+        d_true_thre, 
+        dis_tree_thre_factor,  
+        area_value, 
+        number_iter, 
+        num_MC_points
+    ):
     """ Main function for colocalization
 
     Parameters
@@ -260,9 +249,23 @@ def run_background(num_pair_exp_mean, num_R, num_G, tag_dist, precision_value, d
         iteration_sub = 5
         for k in range(iteration_sub):
             R_pos_simu, G_pos_simu, R_prec_list, G_prec_list = \
-               Generate_Points(tag_dist, num_points = 0, num_R_extra = num_R, num_G_extra = num_G, precision=precision_value, area=area_value)
-            RG_overlap_pair_simu = pair_matching_max_weight_nx(R_pos_simu, G_pos_simu, R_prec_list, G_prec_list, \
-                d_true_thre = d_true_thre, dis_tree_thre_factor = dis_tree_thre_factor, num_MC_points = num_MC_points)
+               Generate_Points(
+                   tag_dist, 
+                   num_points = 0, 
+                   num_R_extra = num_R, 
+                   num_G_extra = num_G, 
+                   precision=precision_value, 
+                   area=area_value
+                )
+            RG_overlap_pair_simu = pair_matching_max_weight_nx(
+                R_pos_simu, 
+                G_pos_simu, 
+                R_prec_list, 
+                G_prec_list,
+                d_true_thre = d_true_thre, 
+                dis_tree_thre_factor = dis_tree_thre_factor, 
+                num_MC_points = num_MC_points
+                )
             RG_overlap_pair_simu_list.append(len(RG_overlap_pair_simu))
         ## Calculate the average of the overlap list from MC simulation given the num_R and num_G
         RG_overlap_pair_simu_ave = int(np.mean(RG_overlap_pair_simu_list))
@@ -276,7 +279,19 @@ def run_background(num_pair_exp_mean, num_R, num_G, tag_dist, precision_value, d
 
 ########################################################################################################
 
-def run_background_two_channel(num_pair_exp_mean, num_R, num_G, tag_dist, prec1, prec2, d_true_thre, dis_tree_thre_factor,  area_value, number_iter, num_MC_points):
+def run_background_two_channel(
+        num_pair_exp_mean, 
+        num_R, 
+        num_G, 
+        tag_dist, 
+        prec1, 
+        prec2, 
+        d_true_thre, 
+        dis_tree_thre_factor,  
+        area_value, 
+        number_iter, 
+        num_MC_points
+        ):
     """ Main function for colocalization
 
     Parameters
@@ -308,9 +323,24 @@ def run_background_two_channel(num_pair_exp_mean, num_R, num_G, tag_dist, prec1,
         iteration_sub = 5
         for k in range(iteration_sub):
             R_pos_simu, G_pos_simu, R_prec_list, G_prec_list = \
-               Generate_Points_two_channel(tag_dist, num_points = 0, num_R_extra = num_R, num_G_extra = num_G, prec1=prec1, prec2=prec2, area=area_value)
-            RG_overlap_pair_simu = pair_matching_max_weight_nx(R_pos_simu, G_pos_simu, R_prec_list, G_prec_list, \
-                d_true_thre = d_true_thre, dis_tree_thre_factor = dis_tree_thre_factor, num_MC_points = num_MC_points)
+               Generate_Points_two_channel(
+                   tag_dist, 
+                   num_points = 0, 
+                   num_R_extra = num_R, 
+                   num_G_extra = num_G, 
+                   prec1=prec1, 
+                   prec2=prec2, 
+                   area=area_value
+                )
+            RG_overlap_pair_simu = pair_matching_max_weight_nx(
+                R_pos_simu, 
+                G_pos_simu, 
+                R_prec_list, 
+                G_prec_list, 
+                d_true_thre = d_true_thre, 
+                dis_tree_thre_factor = dis_tree_thre_factor, 
+                num_MC_points = num_MC_points
+                )
             RG_overlap_pair_simu_list.append(len(RG_overlap_pair_simu))
         ## Calculate the average of the overlap list from MC simulation given the num_R and num_G
         RG_overlap_pair_simu_ave = int(np.mean(RG_overlap_pair_simu_list))
@@ -324,7 +354,20 @@ def run_background_two_channel(num_pair_exp_mean, num_R, num_G, tag_dist, prec1,
 
 ########################################################################################################
 
-def run_exp_iterative_MC(tag_dist, num_points, num_R_extra, num_G_extra, precision, d_true_thre, dis_tree_thre_factor, area, iteration_full, iteration_in_step, iteration_step, num_MC_points):
+def run_exp_iterative_MC(
+        tag_dist, 
+        num_points,
+        num_R_extra, 
+        num_G_extra, 
+        precision, 
+        d_true_thre, 
+        dis_tree_thre_factor, 
+        area, 
+        iteration_full, 
+        iteration_in_step, 
+        iteration_step, 
+        num_MC_points
+        ):
     """ Main function for colocalization
 
     Parameters
@@ -420,7 +463,19 @@ def run_exp_iterative_MC(tag_dist, num_points, num_R_extra, num_G_extra, precisi
 
 ########################################################################################################
 
-def run_background_task(j, num_pair_exp_mean, num_R, num_G, tag_dist, prec1, prec2, d_true_thre, dis_tree_thre_factor, area_value, iteration_step, num_MC_points):
+def run_background_task(
+        j, 
+        num_pair_exp_mean, 
+        num_R, 
+        num_G, 
+        tag_dist, 
+        prec1, 
+        prec2, 
+        d_true_thre, 
+        dis_tree_thre_factor, 
+        area_value, 
+        iteration_step, 
+        num_MC_points):
     # This function handles a single iteration of the background computation
     print(f"Iteration: {j}")
     np.random.seed(j)
@@ -431,7 +486,19 @@ def run_background_task(j, num_pair_exp_mean, num_R, num_G, tag_dist, prec1, pre
 
 ########################################################################################################
 
-def parallel_execution(iteration_in_step, num_pair_exp_mean, num_R, num_G, tag_dist, prec1, prec2, d_true_thre, dis_tree_thre_factor, area, iteration_step, num_MC_points):
+def parallel_execution(
+        iteration_in_step, 
+        num_pair_exp_mean, 
+        num_R, 
+        num_G, 
+        tag_dist, 
+        prec1, 
+        prec2, 
+        d_true_thre, 
+        dis_tree_thre_factor, 
+        area, 
+        iteration_step, 
+        num_MC_points):
     # Create a pool of workers
     with ProcessPoolExecutor(max_workers=None) as executor:
         # Submit tasks to the pool
@@ -452,7 +519,20 @@ def parallel_execution(iteration_in_step, num_pair_exp_mean, num_R, num_G, tag_d
 
 ########################################################################################################
 
-def run_exp_iterative_MC_parallel(tag_dist, num_points, num_R_extra, num_G_extra, precision, d_true_thre, dis_tree_thre_factor, area, iteration_full, iteration_in_step, iteration_step, num_MC_points):
+def run_exp_iterative_MC_parallel(
+        tag_dist, 
+        num_points, 
+        num_R_extra, 
+        num_G_extra, 
+        precision, 
+        d_true_thre, 
+        dis_tree_thre_factor, 
+        area, 
+        iteration_full, 
+        iteration_in_step, 
+        iteration_step, 
+        num_MC_points
+        ):
     """ Main function for colocalization
 
     Parameters
@@ -556,7 +636,21 @@ def run_exp_iterative_MC_parallel(tag_dist, num_points, num_R_extra, num_G_extra
 
 #######################################################################################################################################
 
-def run_exp_iterative_MC_parallel_two_channel(tag_dist, num_points, num_R_extra, num_G_extra, prec1, prec2, d_true_thre, dis_tree_thre_factor, area, iteration_full, iteration_in_step, iteration_step, num_MC_points):
+def run_exp_iterative_MC_parallel_two_channel(
+        tag_dist, 
+        num_points, 
+        num_R_extra, 
+        num_G_extra, 
+        prec1, 
+        prec2, 
+        d_true_thre, 
+        dis_tree_thre_factor, 
+        area, 
+        iteration_full, 
+        iteration_in_step, 
+        iteration_step, 
+        num_MC_points
+        ):
     """ Main function for colocalization
 
     Parameters
@@ -583,9 +677,25 @@ def run_exp_iterative_MC_parallel_two_channel(tag_dist, num_points, num_R_extra,
     for iteration in range(iteration_full):
         print("Current iteration:", iteration)
         # Generate simulation points, positions of R, G, precisions of R and G
-        R_pos, G_pos, R_prec, G_prec = Generate_Points_two_channel(tag_dist, num_points, num_R_extra, num_G_extra, prec1, prec2, area=area)
+        R_pos, G_pos, R_prec, G_prec = Generate_Points_two_channel(
+            tag_dist, 
+            num_points, 
+            num_R_extra, 
+            num_G_extra, 
+            prec1, 
+            prec2, 
+            area=area
+            )
         # Build the maximum weighted bipartitle graph, return the matching
-        pair_exp = pair_matching_max_weight_nx(R_pos, G_pos, R_prec, G_prec, d_true_thre=d_true_thre, dis_tree_thre_factor=dis_tree_thre_factor, num_MC_points=num_MC_points)
+        pair_exp = pair_matching_max_weight_nx(
+            R_pos, 
+            G_pos, 
+            R_prec, 
+            G_prec, 
+            d_true_thre=d_true_thre, 
+            dis_tree_thre_factor=dis_tree_thre_factor, 
+            num_MC_points=num_MC_points
+            )
         num_pair_exp.append(len(pair_exp))
         # Get the summary statistics for the results 
         summary_results = summary_pairs(pair_exp, num_points, num_R_extra, num_G_extra)
