@@ -592,7 +592,7 @@ def run_exp_iterative_MC_parallel(
     )
     
     # Write results to file sequentially after all parallel tasks have completed
-    with open(f"Results_Density_{density_R}.txt", "w") as file:
+    with open(f"Result_Example.txt", "w") as file:
         file.write(f"Number of True Pairs: {num_points}\n")
         file.write(f"Number of R extra: {num_R_extra}\n")
         file.write(f"Number of G extra: {num_G_extra}\n")
@@ -742,7 +742,7 @@ def run_exp_iterative_MC_parallel_two_channel(
     )
     
     # Write results to file sequentially after all parallel tasks have completed
-    with open(f"Results_Density_{density_R}.txt", "w") as file:
+    with open(f"Results_Example.txt", "w") as file:
         file.write(f"Number of True Pairs: {num_points}\n")
         file.write(f"Number of R extra: {num_R_extra}\n")
         file.write(f"Number of G extra: {num_G_extra}\n")
