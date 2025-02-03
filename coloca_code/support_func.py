@@ -19,6 +19,7 @@ def Random_Point(num_R, num_G, scale):
     G_pos = np.random.random((num_G, 2))*scale
     return R_pos, G_pos
 
+#####################################################################################################
 def homo_Possion_Process1(num_R, num_G, R_precision, G_precision, area, frame_len):
     """ Function to generate homogeneous Possion process
 
@@ -92,6 +93,7 @@ def homo_Possion_Process1(num_R, num_G, R_precision, G_precision, area, frame_le
     points_G = points_G + gaussian_array_G
     return points_R, points_G, R_prec_list, G_prec_list, R_frame, G_frame
 
+#####################################################################################################
 def frame_diff(frame_pairs, title, cell):
     """ Function to calculate the frame difference
 
@@ -115,7 +117,6 @@ def frame_diff(frame_pairs, title, cell):
     ax.set_xlabel('Difference of frames in a pair (abs)')
     ax.set_ylabel('Count')
     plt.show()
-
 
 #############################################################################################################################
 def get_vertices(tag_dist, point):
@@ -164,7 +165,6 @@ def Generate_Points(tag_dist, num_points, num_R_extra, num_G_extra, precision, a
     G_pos = G_pos + gaussian_array_G
     return R_pos, G_pos, R_prec[:,0], G_prec[:,0]
 
-
 #############################################################################################################################
 def Generate_Points_two_channel(tag_dist, num_points, num_R_extra, num_G_extra, prec1, prec2, area):
     """ Function to generate the points 
@@ -206,8 +206,7 @@ def Generate_Points_two_channel(tag_dist, num_points, num_R_extra, num_G_extra, 
     G_pos = G_pos + gaussian_array_G
     return R_pos, G_pos, R_prec_2d[:,0], G_prec_2d[:,0]
 
-
-
+#####################################################################################################
 def random_select(R_pos, G_pos, R_prec, G_prec, sample_size):
     """ Function to randomly select the points in the list
 
@@ -227,9 +226,19 @@ def random_select(R_pos, G_pos, R_prec, G_prec, sample_size):
     G_prec = G_prec[random_indices_G]
     return R_pos, G_pos, R_prec, G_prec, random_indices_R, random_indices_G
 
-#################################################################################################
-#### Function to plot colocalization and non-colocalization
+#####################################################################################################
 def plot_coloca(pair_index, R_pos, G_pos, filtered_R_Prec, filtered_G_Prec, name):
+    """ Function to plot colocalization and non-colocalization
+
+    Parameters
+    ----------
+    pair_index: index of pairs
+    R_pos: positions of R
+    G_pos: positions of G
+    filtered_R_Prec: localization precisions of R
+    filtered_G_Prec: localization precisions of G
+    name: title
+    """
     index_R_C = np.array(pair_index).T[0]
     index_G_C = np.array(pair_index).T[1]
     
