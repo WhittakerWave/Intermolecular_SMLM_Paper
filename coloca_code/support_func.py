@@ -12,6 +12,7 @@ def Random_Point(num_R, num_G, scale):
     return R_pos, G_pos
 
 def homo_Possion_Process1(num_R, num_G, R_precision, G_precision, area, frame_len):
+    ## Homogeneous Possion process
     grid = [[0,np.sqrt(area)], [0,np.sqrt(area)]]
     #Simulation window parameters
     xMin = 0
@@ -73,6 +74,7 @@ def homo_Possion_Process1(num_R, num_G, R_precision, G_precision, area, frame_le
     return points_R, points_G, R_prec_list, G_prec_list, R_frame, G_frame
 
 def frame_diff(frame_pairs, title, cell):
+    ## Calculate the frame difference between the pairs
     frame_diff = []
     for item in frame_pairs:
         frame_diff.append(abs(item[0] - item[1]))
@@ -166,7 +168,6 @@ def random_select(R_pos, G_pos, R_prec, G_prec, sample_size):
 
 #################################################################################################
 #### Function to plot colocalization and non-colocalization
-
 def plot_coloca(pair_index, R_pos, G_pos, filtered_R_Prec, filtered_G_Prec, name):
     index_R_C = np.array(pair_index).T[0]
     index_G_C = np.array(pair_index).T[1]

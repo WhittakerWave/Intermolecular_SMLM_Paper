@@ -1,14 +1,14 @@
 
 
 #####################################################################################################
-### Colocalization using Simulation Data to test the algorthms 
+### Colocalization using Simulation Data
 
 ### Import related functions 
 from package_func import *
 from coloca_func import * 
 from support_func import *
 
-## Tag Distance betweeen two proteins for example  GPCR (R) and G-Protein (G), 0.01um = 10nm
+## tag_dist: True distance betweeen two proteins for example  GPCR (R) and G-Protein (G), 0.01um = 10nm
 tag_dist = 0.01
 simu_area = 50
 ## Read the sample localization distribution

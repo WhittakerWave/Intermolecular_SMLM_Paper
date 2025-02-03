@@ -4,12 +4,21 @@
 from package_func import *
 from support_func import *
 #####################################################################################################
-### Method I: Using Pairwise distance
+
 def dist(p1, p2):
     return math.sqrt((p1[0] - p2[0])**2 + (p1[1] - p2[1])**2)
+
 def closest_pairs_index(R_filtered, G_filtered, threshold):
-    ## Hard thresholding, doesn't depend on precision
-    ## Or use cKDTree and query_ball_point
+    """ Function to find the possible pairs via hard-thresholding
+
+    Parameters
+    ----------
+    R_filtered: Positions of R, usually filterd based on SNR
+    G_filtered: Positions of G, usually filterd based on SNR
+    threshold:  threshold
+    """
+    ## Hard thresholding, doesn't depend on localization precision
+    ## Can also use cKDTree and query_ball_point
     R_tree = KDTree(R_filtered)
     G_tree = KDTree(G_filtered)
     pairs_R = G_tree.query_radius(R_filtered, threshold)
@@ -35,7 +44,7 @@ def closest_pairs_index(R_filtered, G_filtered, threshold):
     return final_pairs
 
 def closest_pairs_index_precision(R_pos, G_pos, R_prec, G_prec, factor, threshold, R_frame, G_frame):
-    ## Combine the precision
+    ## Add localization precision
     ## Or use cKDTree and query_ball_point
     R_tree = KDTree(R_pos)
     G_tree = KDTree(G_pos)
