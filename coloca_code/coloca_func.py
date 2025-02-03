@@ -44,6 +44,19 @@ def closest_pairs_index(R_filtered, G_filtered, threshold):
     return final_pairs
 
 def closest_pairs_index_precision(R_pos, G_pos, R_prec, G_prec, factor, threshold, R_frame, G_frame):
+    """ Function to find the possible pairs via a factor 
+
+    Parameters
+    ----------
+    R_pos: Positions of R, usually filterd based on SNR
+    G_pos: Positions of G, usually filterd based on SNR
+    R_prec: Precision of R
+    G_prec: Precision of G
+    factor: the threshold factor
+    threshold: hard threshold for the query 
+    R_frame: Frame number for R
+    G_frame: Frame number for G
+    """
     ## Add localization precision
     ## Or use cKDTree and query_ball_point
     R_tree = KDTree(R_pos)
@@ -76,8 +89,19 @@ def closest_pairs_index_precision(R_pos, G_pos, R_prec, G_prec, factor, threshol
     return final_pairs, frame_pairs
 
 #####################################################################################################
-#### Prob pf the pair by the Monte Carlo estimation 
 def prob_pair(point1, point2, sigma1, sigma2, num_points, threshold):
+    """ Function to calculate the proximity prob
+
+    Parameters
+    ----------
+    point1: position of point 1 
+    point2: position of point 2
+    sigma1: loca precision of point 1
+    sigma2: loca precision of point 2
+    num_points: number of Monte Carlo points
+    threshold: the threshold of the circle with radius r
+    """
+    ## Prob pf the pair by the Monte Carlo estimation 
     ## Sample the first point with precision sigma1
     point1_prec = np.random.normal(loc = point1, scale = sigma1, size=(num_points, 2))
     ## Sample the second point with precision sigma2
