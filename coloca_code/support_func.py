@@ -302,6 +302,6 @@ def plot_coloca(pair_index, R_pos, G_pos, filtered_R_Prec, filtered_G_Prec, name
     ax.set_ylabel(r"y/$\mu m$")
     if name is not None:
         ax.set_title(name, fontsize = 20)
-    #useLargeSize(plt, ax, marker_lines = None, fontsize = 'xx-large',fontproperties=None, LW=2.3)
+        
     plt.show()
 
