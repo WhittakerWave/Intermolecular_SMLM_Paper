@@ -16,7 +16,6 @@ data = pd.read_csv('Example_SMLM.txt', delimiter='\t', encoding='ISO-8859-1')
 filtered_data = data[(data['Precision [nm]'] >= 5) & (data['Precision [nm]'] <= 40)]
 prec_channel_1 = filtered_data['Precision [nm]']/1000
 
-
 def main(density):
     # Number of true pairs 
     num_points = int(density*simu_area*1/2)
@@ -40,7 +39,6 @@ def main(density):
             iteration_step = 25, 
             num_MC_points= int(1e5)
         )
-
 
 def run(d_values):
     for item in d_values:
